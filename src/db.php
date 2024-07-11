@@ -1,22 +1,35 @@
 <?php
-class Database {
-    private $serverName;
-    private $connectionOptions;
-
-    public function __construct() {
-        $this->serverName = getenv('DB_SERVER');
-        $this->connectionOptions = [
-            "Database" => getenv('DB_NAME'),
-            "Uid" => getenv('DB_USER'),
-            "PWD" => getenv('DB_PASSWORD')
-        ];
+// Function to load environment variables from .env file
+function loadEnv($path) {
+    if (!file_exists($path)) {
+        throw new Exception('.env file not found');
     }
-
-    public function getConnection() {
-        $conn = sqlsrv_connect($this->serverName, $this->connectionOptions);
-        if ($conn === false) {
-            die(print_r(sqlsrv_errors(), true));
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) {
+            continue;
         }
-        return $conn;
+        list($name, $value) = explode('=', $line, 2);
+        $_ENV[$name] = trim($value);
     }
 }
+
+// Load environment variables
+loadEnv(__DIR__ . '/../.env');
+
+function getDBConnection() {
+    $serverName = $_ENV['DB_SERVER'];
+    $connectionOptions = array(
+        "Database" => $_ENV['DB_NAME'],
+        "Uid" => $_ENV['DB_USER'],
+        "PWD" => $_ENV['DB_PASSWORD']
+    );
+
+    $conn = sqlsrv_connect($serverName, $connectionOptions);
+    if ($conn === false) {
+        die(print_r(sqlsrv_errors(), true));
+    }
+
+    return $conn;
+}
+?>

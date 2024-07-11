@@ -1,17 +1,18 @@
 <?php
 include_once '../../src/functions.php';
 $data = getAllData();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Admin View</title>
-    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="../assets/js/scripts.js"></script>
+    <script src="../../assets/js/scripts.js"></script>
 </head>
 <body>
     <div class="container">
@@ -31,7 +32,7 @@ $data = getAllData();
             <tbody>
                 <?php foreach ($data as $row): ?>
                     <tr>
-                        <td><?= $row['date_of_submission'] ?></td>
+                        <td><?= $row['date_of_submission']->format('Y-m-d H:i:s') ?></td>
                         <td><?= $row['first_name'] ?></td>
                         <td><?= $row['surname'] ?></td>
                         <td><?= $row['age'] ?></td>
