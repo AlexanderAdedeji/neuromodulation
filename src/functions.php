@@ -63,6 +63,7 @@ function insertPainInventory($patientID, $scores) {
     sqlsrv_close($conn);
 }
 
+
 function deleteRecord($id) {
     $conn = getDBConnection();
     $sql = "DELETE FROM PainInventory WHERE id = ?";
@@ -70,10 +71,15 @@ function deleteRecord($id) {
 
     $stmt = sqlsrv_query($conn, $sql, $params);
     if ($stmt === false) {
-        die(print_r(sqlsrv_errors(), true));
+        error_log(print_r(sqlsrv_errors(), true)); 
+        return false;
     }
 
+    $affectedRows = sqlsrv_rows_affected($stmt);
     sqlsrv_free_stmt($stmt);
     sqlsrv_close($conn);
+
+    return $affectedRows > 0;
 }
+
 ?>

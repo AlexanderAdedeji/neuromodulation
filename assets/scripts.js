@@ -8,3 +8,9 @@ $(document).ready(function() {
         $("#totalScore").val(totalScore);
     });
 });
+
+
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log('JavaScript loaded successfully');
+});
