@@ -1,5 +1,6 @@
 <?php
 include_once '../../src/functions.php';
+$questions = include '../../data/questions.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,32 +43,17 @@ include_once '../../src/functions.php';
             <div class="card mt-3">
                 <div class="card-header">Brief Pain Inventory (BPI)</div>
                 <div class="card-body">
-                    <p>The question below is from a scale of 0-100:</p>
-                    <div class="form-group">
-                        <label for="q1">How much relief have pain treatments or medications FROM THIS CLINIC provided?</label>
-                        <input type="number" class="form-control" id="q1" name="q1" min="0" max="100" required>
-                    </div>
-                    <p>The remaining questions are to be answered on a scale of 0-10:</p>
-                    <?php 
-                    $questions = [
-                        "Please rate your pain based on the number that best describes your pain at it’s WORST in the past week.",
-                        "Please rate your pain based on the number that best describes your pain at it’s LEAST in the past week.",
-                        "Please rate your pain based on the number that best describes your pain on the Average.",
-                        "Please rate your pain based on the number that best describes your pain that tells how much pain you have RIGHT NOW.",
-                        "Based on the number that best describes how during the past week pain has INTERFERED with your: General Activity.",
-                        "Based on the number that best describes how during the past week pain has INTERFERED with your: Mood.",
-                        "Based on the number that best describes how during the past week pain has INTERFERED with your: Walking ability.",
-                        "Based on the number that best describes how during the past week pain has INTERFERED with your: Normal work (includes work both outside the home and housework).",
-                        "Based on the number that best describes how during the past week pain has INTERFERED with your: Relationships with other people.",
-                        "Based on the number that best describes how during the past week pain has INTERFERED with your: Sleep.",
-                        "Based on the number that best describes how during the past week pain has INTERFERED with your: Enjoyment of life."
-                    ];
-                    for ($i = 2; $i <= 12; $i++): ?>
+                    <?php foreach ($questions as $question): ?>
+                        <?php if ($question['id'] == 'q1'): ?>
+                            <p>The question below is from a scale of 0-100:</p>
+                        <?php elseif ($question['id'] == 'q2'): ?>
+                            <p>The remaining questions are to be answered on a scale of 0-10:</p>
+                        <?php endif; ?>
                         <div class="form-group">
-                            <label for="q<?= $i ?>"><?= $questions[$i-2] ?></label>
-                            <input type="number" class="form-control" id="q<?= $i ?>" name="q<?= $i ?>" min="0" max="10" required>
+                            <label for="<?= $question['id'] ?>"><?= $question['text'] ?></label>
+                            <input type="number" class="form-control" id="<?= $question['id'] ?>" name="<?= $question['id'] ?>" min="<?= $question['min'] ?>" max="<?= $question['max'] ?>" required>
                         </div>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
             <div class="card mt-3">
