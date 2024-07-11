@@ -6,16 +6,16 @@ include_once '../../src/functions.php';
 <head>
     <meta charset="UTF-8">
     <title>Neuromodulation Form</title>
-    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../../assets/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="../assets/js/scripts.js"></script>
+    <script src="../../assets/scripts.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>Neuromodulation</h1>
-        <form id="neuromodulationForm" action="process_form.php" method="post">
+        <form id="neuromodulationForm" action="../controllers/process_form.php" method="post">
             <div class="card">
                 <div class="card-header">Patient Details</div>
                 <div class="card-body">

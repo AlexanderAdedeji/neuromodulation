@@ -33,6 +33,7 @@ CREATE TABLE PainInventory (
     q10 INT,
     q11 INT,
     q12 INT,
+    date_of_submission DATETIME DEFAULT GETDATE(),
     total_score INT
 );
 GO

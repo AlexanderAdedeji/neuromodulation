@@ -14,6 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     insertPainInventory($patientID, $scores);
 
-    header('Location: admin.php');
+    header('Location: ../views/admin.php');
 }
 ?>

@@ -3,15 +3,24 @@ require_once 'db.php';
 
 function getAllData() {
     $conn = getDBConnection();
-    $sql = "SELECT * FROM Patients";
+    $sql = "SELECT p.id, p.first_name, p.surname, p.date_of_birth, pi.total_score, pi.date_of_submission
+            FROM Patients p
+            JOIN PainInventory pi ON p.id = pi.patient_id";
     $stmt = sqlsrv_query($conn, $sql);
-    
+
     if ($stmt === false) {
         die(print_r(sqlsrv_errors(), true));
     }
 
     $data = [];
     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        // Converting date_of_submission to DateTime object
+        if ($row['date_of_submission'] instanceof DateTime) {
+            $row['date_of_submission'] = $row['date_of_submission']->format('Y-m-d H:i:s');
+        } else {
+            $row['date_of_submission'] = $row['date_of_submission']->format('Y-m-d H:i:s');
+        }
+        $row['date_of_birth'] = $row['date_of_birth']->format('Y-m-d');
         $data[] = $row;
     }
 
@@ -20,6 +29,7 @@ function getAllData() {
 
     return $data;
 }
+
 
 function insertPatient($firstName, $surname, $dateOfBirth) {
     $conn = getDBConnection();
