@@ -7,17 +7,17 @@ $questions = include '../../data/questions.php';
 <head>
     <meta charset="UTF-8">
     <title>Neuromodulation Form</title>
-    <!-- <link rel="stylesheet" href="../../assets/style.css"> -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-    <!-- <script src="../../assets/scripts.js"></script> -->
+    <script src="../../assets/js/scripts.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Neuromodulation</h1>
+        <h1 class="header-title">Neuromodulation Patient Registration</h1>
         <form id="neuromodulationForm" action="../controllers/process_form.php" method="post">
             <div class="card">
                 <div class="card-header">Patient Details</div>
@@ -64,30 +64,10 @@ $questions = include '../../data/questions.php';
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            <button type="submit" class="btn btn-primary mt-3 mb-3 ">Submit</button>
         </form>
     </div>
 
-    <script>
-        document.getElementById('dateOfBirth').addEventListener('input', function() {
-            let dob = new Date(this.value);
-            let today = new Date();
-            let age = today.getFullYear() - dob.getFullYear();
-            let monthDifference = today.getMonth() - dob.getMonth();
-            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
-                age--;
-            }
-            document.getElementById('age').value = age;
-        });
-
-        document.getElementById('neuromodulationForm').addEventListener('input', function() {
-            let totalScore = 0;
-            for (let i = 2; i <= 12; i++) {
-                let score = parseInt(document.getElementById('q' + i).value) || 0;
-                totalScore += score;
-            }
-            document.getElementById('totalScore').value = totalScore;
-        });
-    </script>
+    <script src="../assets/js/scripts.js"></script>
 </body>
 </html>
