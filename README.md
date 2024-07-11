@@ -26,7 +26,7 @@ This application is designed to collect and manage patient data for a Neuromodul
 
 1. **Clone the Repository**
     ```sh
-    git clone https://github.com/yourusername/neuromodulation.git
+    git clone https://github.com/AlexanderAdedeji/neuromodulation
     cd neuromodulation
     ```
 
