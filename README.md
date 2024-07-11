@@ -47,8 +47,8 @@ This application is designed to collect and manage patient data for a Neuromodul
     - Ensure the site is running and accessible.
 
 5. **Run the Application**
-    - Navigate to `http://localhost/your_site_name/views/index.php` to access the form.
-    - Navigate to `http://localhost/your_site_name/views/admin.php` to access the admin interface.
+    - Navigate to `http://localhost/views/index.php` to access the form.
+    - Navigate to `http://localhost/views/admin.php` to access the admin interface.
 
 ## Application Functionality
 
