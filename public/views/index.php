@@ -13,7 +13,6 @@ $questions = include '../../data/questions.php';
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-    <script src="../../assets/js/scripts.js"></script>
 </head>
 <body>
     <div class="container">

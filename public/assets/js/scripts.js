@@ -1,4 +1,3 @@
-// scripts.js
 
 document.addEventListener('DOMContentLoaded', function() {
     // For the form page
