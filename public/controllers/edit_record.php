@@ -1,5 +1,6 @@
 <?php
 include_once '../../src/functions.php';
+include_once '../../data/questions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
@@ -21,6 +22,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     sqlsrv_close($conn);
 
     header('Location: ../views/admin.php');
+    exit;
+}
+
+$id = $_GET['id'] ?? null;
+if ($id) {
+    echo "Debug: ID provided is $id<br>"; // Debug statement
+    $conn = getDBConnection();
+    $sql = "SELECT * FROM PainInventory WHERE id = ?";
+    $params = [$id];
+    $stmt = sqlsrv_query($conn, $sql, $params);
+
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true));
+    }
+
+    $record = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+    sqlsrv_free_stmt($stmt);
+    sqlsrv_close($conn);
+
+    if (!$record) {
+        die('Debug: Record not found');
+    } else {
+        echo "Debug: Record found<br>";
+        echo "<pre>";
+        print_r($record);
+        echo "</pre>";
+    }
+} else {
+    die('Debug: ID not provided');
 }
 ?>
 
@@ -39,18 +69,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
         <h1>Edit Record</h1>
         <form action="edit_record.php" method="post">
-            <?php
-            $id = $_GET['id'];
-            $data = getAllData();
-            $record = array_filter($data, fn($item) => $item['id'] == $id)[0];
-            ?>
-            <input type="hidden" name="id" value="<?= $id ?>">
-            <?php for ($i = 1; $i <= 12; $i++): ?>
-                <div class="form-group">
-                    <label for="q<?= $i ?>">Question <?= $i ?></label>
-                    <input type="number" class="form-control" id="q<?= $i ?>" name="q<?= $i ?>" value="<?= $record["q$i"] ?>" required>
+            <input type="hidden" name="id" value="<?= htmlspecialchars($id) ?>">
+            <div class="card mt-3">
+                <div class="card-header">Patient Details</div>
+                <div class="card-body">
+                    <?php foreach ($questions as $key => $question): ?>
+                        <div class="form-group">
+                            <label for="q<?= $key ?>"><?= htmlspecialchars($question) ?></label>
+                            <input type="number" class="form-control" id="q<?= $key ?>" name="q<?= $key ?>" value="<?= htmlspecialchars($record["q$key"] ?? '') ?>" required>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endfor; ?>
+            </div>
             <button type="submit" class="btn btn-primary mt-3">Save</button>
         </form>
     </div>

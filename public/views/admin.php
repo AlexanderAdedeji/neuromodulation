@@ -1,51 +1,88 @@
 <?php
 include_once '../../src/functions.php';
-$data = getAllData();
+include_once '../../data/questions.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'];
+    $scores = [];
+    for ($i = 1; $i <= 12; $i++) {
+        $scores[] = $_POST["q$i"];
+    }
+    $totalScore = array_sum(array_slice($scores, 1));
+
+    $conn = getDBConnection();
+    $sql = "UPDATE PainInventory SET q1 = ?, q2 = ?, q3 = ?, q4 = ?, q5 = ?, q6 = ?, q7 = ?, q8 = ?, q9 = ?, q10 = ?, q11 = ?, q12 = ?, total_score = ? WHERE patient_id = ?";
+    $params = array_merge($scores, [$totalScore, $id]);
+
+    $stmt = sqlsrv_query($conn, $sql, $params);
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true));
+    }
+    sqlsrv_free_stmt($stmt);
+    sqlsrv_close($conn);
+
+    header('Location: ../views/admin.php');
+    exit;
+}
+
+$id = $_GET['id'] ?? null;
+if ($id) {
+    echo "Patient ID:  $id<br>"; 
+    $conn = getDBConnection();
+    $sql = "SELECT * FROM PainInventory WHERE patient_id = ?";
+    $params = [$id];
+    $stmt = sqlsrv_query($conn, $sql, $params);
+
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true));
+    }
+
+    $record = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+    sqlsrv_free_stmt($stmt);
+    sqlsrv_close($conn);
+
+    if (!$record) {
+        die('Debug: Record not found');
+    } else {
+        echo "Debug: Record found<br>";
+        echo "<pre>";
+        print_r($record);
+        echo "</pre>";
+    }
+} else {
+    die('Debug: ID not provided');
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin View</title>
-    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <title>Edit Record</title>
+    <link rel="stylesheet" href="../../assets/style/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/scripts.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Admin View</h1>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Date of Submission</th>
-                    <th>First Name</th>
-                    <th>Surname</th>
-                    <th>Age</th>
-                    <th>Date of Birth</th>
-                    <th>Total Score</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($data as $row): ?>
-                    <tr>
-                        <td><?= $row['date_of_submission'] ?></td>
-                        <td><?= $row['first_name'] ?></td>
-                        <td><?= $row['surname'] ?></td>
-                        <td><?= date_diff(date_create($row['date_of_birth']), date_create('today'))->y ?></td>
-                        <td><?= $row['date_of_birth'] ?></td>
-                        <td><?= $row['total_score'] ?></td>
-                        <td>
-                            <a href="../controllers/edit_record.php?id=<?= $row['id'] ?>" class="btn btn-warning">Edit</a>
-                            <a href="../controllers/delete_record.php?id=<?= $row['id'] ?>" class="btn btn-danger">Delete</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <h1>Edit Record</h1>
+        <form action="edit_record.php" method="post">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($id) ?>">
+            <div class="card mt-3">
+                <div class="card-header">Patient Details</div>
+                <div class="card-body">
+                    <?php foreach ($questions as $key => $question): ?>
+                        <div class="form-group">
+                            <label for="q<?= $key ?>"><?= htmlspecialchars($question) ?></label>
+                            <input type="number" class="form-control" id="q<?= $key ?>" name="q<?= $key ?>" value="<?= htmlspecialchars($record["q$key"] ?? '') ?>" required>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Save</button>
+        </form>
     </div>
-
-    <script src="../../assets/js/scripts.js"></script>
 </body>
 </html>

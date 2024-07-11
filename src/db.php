@@ -14,7 +14,7 @@ function loadEnv($path) {
     }
 }
 
-// Load environment variables
+
 loadEnv(__DIR__ . '/../.env');
 
 function getDBConnection() {
